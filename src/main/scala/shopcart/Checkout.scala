@@ -1,23 +1,14 @@
 package shopcart
 
-import shopcart.Checkout.Zero
-
-class Checkout {
+case class Checkout(productsOnOffer: ProductsOnOffer = new ProductsOnOfferService) extends PriceSelector {
   val products = Seq(Apple, Orange)
 
   def calculateTotalCost(items: Seq[String]): Price = {
-    def selectProduct(item: String): Price = {
-      products.filter( _.name == item.toLowerCase ) match {
-        case x::y => x.price
-        case List() => Zero
-      }
-    }
+    val appleOffer = productsOnOffer.offerFor(Apple)
+    val totalApplesCost = appleOffer.map { offer => offer.applyTo(items) } getOrElse(Zero)
 
-    val prices = items.map { selectProduct _ }
-    prices.fold(Zero)(_ + _)
+    val totalOrangesCost = Orange.price * OrangeFilter(items).filteredProducts.size
+
+    totalApplesCost + totalOrangesCost
   }
-}
-
-object Checkout {
-  val Zero= Price(0)
 }
