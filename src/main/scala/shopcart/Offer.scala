@@ -16,12 +16,10 @@ case class BuyOneGetOneFree(override val product: Product) extends Offer with Co
     val size =  productFilter.filteredProducts.size
 
     val quotient = size / 2
-    val quotientIsPositive = quotient > 0
 
     val remainder = size % 2
-    val remainderIsPositive = remainder > 0
 
-    val price = (quotientIsPositive, remainderIsPositive) match {
+    val price = (quotient > 0, remainder > 0) match {
       case (false, false) => Zero
       case _ => product.price * (quotient+remainder)
     }
