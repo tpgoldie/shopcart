@@ -1,7 +1,6 @@
-import org.scalatest.{FunSpec, GivenWhenThen, Matchers}
 import shopcart.{Checkout, Price}
 
-class BuyOneGetOneFreeTest extends FunSpec with GivenWhenThen with Matchers {
+class BuyOneGetOneFreeTest extends ProductsPricingTest {
   describe("buy one get one free offer") {
     val checkout = new Checkout
 

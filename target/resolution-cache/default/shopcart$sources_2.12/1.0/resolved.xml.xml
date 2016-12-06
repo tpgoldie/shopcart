@@ -4,7 +4,7 @@
 		module="shopcart$sources_2.12"
 		revision="1.0"
 		status="integration"
-		publication="20161124182908"
+		publication="20161206123601"
 	/>
 	<configurations>
 		<conf name="compile" visibility="public" description=""/>

@@ -1,7 +1,5 @@
 package shopcart
 
-class ProductsOnOfferService extends ProductsOnOffer {
-  private val productsOnOffer: Map[Product, Offer] = Map(Apple -> BuyOneGetOneFree(Apple))
-
+class ProductsOnOfferService(productsOnOffer: Map[Product, Offer] = Map(Apple -> NotOnOffer(Apple), Orange -> NotOnOffer(Orange))) extends ProductsOnOffer {
   override def offerFor(product: Product): Option[Offer] = productsOnOffer.get(product)
 }

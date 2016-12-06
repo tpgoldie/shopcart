@@ -7,7 +7,8 @@ case class Checkout(productsOnOffer: ProductsOnOffer = new ProductsOnOfferServic
     val appleOffer = productsOnOffer.offerFor(Apple)
     val totalApplesCost = appleOffer.map { offer => offer.applyTo(items) } getOrElse(Zero)
 
-    val totalOrangesCost = Orange.price * OrangeFilter(items).filteredProducts.size
+    val orangeOffer = productsOnOffer.offerFor(Orange)
+    val totalOrangesCost = orangeOffer.map { offer => offer.applyTo(items) } getOrElse(Zero)
 
     totalApplesCost + totalOrangesCost
   }
