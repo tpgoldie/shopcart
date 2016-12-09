@@ -4,12 +4,9 @@ case class Checkout(productsOnOffer: ProductsOnOffer = new ProductsOnOfferServic
   val products = Seq(Apple, Orange)
 
   def calculateTotalCost(items: Seq[String]): Price = {
-    val appleOffer = productsOnOffer.offerFor(Apple)
-    val totalApplesCost = appleOffer.map { offer => offer.applyTo(items) } getOrElse(Zero)
+    val products = Seq(Apple, Orange)
+    val prices: Seq[Price] = products map { product => productsOnOffer.offerFor(product).map { offer => offer.applyTo(items) } getOrElse(Zero) }
 
-    val orangeOffer = productsOnOffer.offerFor(Orange)
-    val totalOrangesCost = orangeOffer.map { offer => offer.applyTo(items) } getOrElse(Zero)
-
-    totalApplesCost + totalOrangesCost
+    prices.fold(Zero)(_ + _)
   }
 }

@@ -6,6 +6,10 @@ sealed trait Offer extends Constants {
   def applyTo(items: Seq[String]): Price
 
   protected def selectFilter(items: Seq[String]): ProductFilter = {
+    selectFilter(product, items)
+  }
+
+  protected def selectFilter(product: Product, items: Seq[String]): ProductFilter = {
     product match {
       case Apple => AppleFilter(items)
       case Orange => OrangeFilter(items)
@@ -43,7 +47,7 @@ case class BuyOneGetOneFree(override val product: Product) extends Offer {
   }
 }
 
-case class ThreeForTwo(override val product: Product) extends Offer with Constants {
+case class ThreeForTwo(override val product: Product) extends Offer {
   override def applyTo(items: Seq[String]): Price = {
     val productFilter = selectFilter(items)
 
@@ -63,5 +67,24 @@ case class ThreeForTwo(override val product: Product) extends Offer with Constan
     }
 
     price
+  }
+}
+
+case class CheapestOfTwo(override val product: Product, expensiveProduct: Product) extends Offer {
+  override def applyTo(items: Seq[String]): Price = {
+    val cheapestProducts = selectFilter(product, items).filteredProducts
+
+    val expensiveProducts = selectFilter(expensiveProduct, items).filteredProducts
+
+    val pairs = expensiveProducts zip cheapestProducts
+
+    val costOfExpensiveProducts = expensiveProduct.price * pairs.size
+
+    val leftOverSize = cheapestProducts.size - expensiveProducts.size
+
+    val leftOversCost = if (leftOverSize >= 0) { product.price * leftOverSize }
+    else { expensiveProduct.price * Math.abs(leftOverSize) }
+
+    costOfExpensiveProducts + leftOversCost
   }
 }
